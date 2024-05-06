@@ -1,30 +1,29 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
+import 'package:shoe_app/Custom_Widget/shoe_tile.dart';
+import 'package:shoe_app/Provider/shoe_size_provider.dart';
 
 import '../app_lists.dart';
 
-class Shoes extends StatefulWidget {
+class Shoes extends StatelessWidget {
   const Shoes({super.key, required this.image, required this.tag});
-
   final String image;
   final String tag;
-
-  @override
-  State<Shoes> createState() => _ShoesState();
-}
-
-class _ShoesState extends State<Shoes> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    log('build');
     return Scaffold(
       body: Hero(
-        tag: widget.tag,
+        tag: tag,
         child: Container(
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(widget.image), fit: BoxFit.cover),
+                image: AssetImage(image), fit: BoxFit.cover),
           ),
           child: Stack(
             children: [
@@ -113,39 +112,37 @@ class _ShoesState extends State<Shoes> {
                           itemCount: shoesSize.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  for (int shoesSizeIndex = 0; shoesSizeIndex <= shoesSize.length -1; shoesSizeIndex++) {
-                                    shoesSize[shoesSizeIndex][1] = false;
-                                  }
-                                  shoesSize[index][1] = !shoesSize[index][1];
-                                });
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 250),
-                                width: size.height * 0.07,
-                                height: size.height * 0.07,
-                                margin: const EdgeInsets.only(right: 20.0),
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                    color: shoesSize[index][1]
-                                        ? Colors.white
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: FittedBox(
-                                  child: Center(
-                                    child: Text(
-                                      '${shoesSize[index][0]}',
-                                      style: TextStyle(
+                            return Consumer<ShoeSizeProvider>(
+                              builder: (context, value, child) =>
+                                  GestureDetector(
+                                    onTap: () {
+                                      value.resetShoeSize(index: index);
+                                    },
+                                    child: AnimatedContainer(
+                                      duration: const Duration(milliseconds: 250),
+                                      width: size.height * 0.07,
+                                      height: size.height * 0.07,
+                                      margin: const EdgeInsets.only(right: 20.0),
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
                                           color: shoesSize[index][1]
-                                              ? Colors.black
-                                              : Colors.white,
-                                          fontWeight: FontWeight.bold),
+                                              ? Colors.white
+                                              : Colors.transparent,
+                                          borderRadius: BorderRadius.circular(10)),
+                                      child: FittedBox(
+                                        child: Center(
+                                          child: Text(
+                                            '${shoesSize[index][0]}',
+                                            style: TextStyle(
+                                                color: shoesSize[index][1]
+                                                    ? Colors.black
+                                                    : Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
                             );
                           },
                         ),

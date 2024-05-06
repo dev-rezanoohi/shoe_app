@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoe_app/views/shoes.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+
+import '../View/shoes.dart';
 
 class ShoeTile extends StatelessWidget {
   const ShoeTile(
@@ -84,12 +85,10 @@ class ShoeTile extends StatelessWidget {
                     height: 35,
                     decoration: const BoxDecoration(
                         color: Colors.white, shape: BoxShape.circle),
-                    child:  Center(
+                    child: Center(
                       child: IconButton(
-                        onPressed: () {
-
-                        },
-                        icon: Icon(
+                        onPressed: () {},
+                        icon: const Icon(
                           Icons.favorite_border,
                           size: 20,
                           color: Colors.black,
